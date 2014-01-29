@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+    </head>
+	<body>
+		<button onclick="login()">Login</button>
+		<button onclick="getLoginStatus()">Get login</button>
+		<button onclick="logout()">Logout</button>
+        
+        <div id="data">loading ...</div>
+        
+        <!--<script src="http://localhost:8080/target/target-script-min.js#anonymous"></script>-->
+        <div id="fb-root"></div>
+        <!-- cordova -->
+		<script src="cordova.js"></script>
+	    <!-- cordova facebook plugin -->
+		<script src="cdv-plugin-fb-connect.js"></script>
+	    <!-- facebook js sdk -->
+		<script src="facebook-js-sdk.js"></script>
+        
+		<script>
+             <!-- These are the notifications that are displayed to the user through pop-ups if the above JS files does not exist in the same directory-->
+           if ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined')) alert('Cordova variable is missing. Check  cordova.js included correctly');
+            if (typeof CDV == 'undefined') alert('CDV variable is missing. Check cdv-plugin-fb-connect.js is included correctly');
+            if (typeof FB == 'undefined') alert('FB variable is missing. Check the Facebook JS SDK file included.');
+			
+			
+			FB.Event.subscribe('auth.login', function(response) {
+                               alert('login event fired !!');
+                               });
+            
+            FB.Event.subscribe('auth.logout', function(response) {
+                               alert('logout event fired !!');
+                               });
+           
+            
+            FB.Event.subscribe('auth.statusChange', function(response) {
+                               alert('statusChange event fired !!');
+                               });
+            
+            /*function getSession() {
+                alert("session: " + JSON.stringify(FB.getSession()));
+            }
+            */
+          function getLoginStatus() {
+                FB.getLoginStatus(function(response) {
+                                  if (response.status == 'connected') {
+                                  alert('You are connected to Fb');
+                                  } else {
+                                  alert('not connected to FB');
+                                  }
+                                  });
+            }
+            
+           function logout() {
+                FB.logout(function(response) {
+                          alert('logged out');
+                          });
+            }
+            
+             function login() {
+                FB.login(
+                         function(response) {
+                         if (response.session) {
+                         alert('you are logged in');
+                         } else {
+                         alert('you are not logged in');
+                         }
+                         },
+                         { scope: "email" }
+                         );
+            }
+		
+		 document.addEventListener('deviceready', function() {
+                                      try {
+                                      alert('Device is ready! Write your app id below .For demo i put my app id there.');
+                                      FB.init({ appId: "775510399143062", nativeInterface: CDV.FB, useCachedDialogs: false });
+                                      document.getElementById('data').innerHTML = "";
+                                      } catch (e) {
+                                      alert(e);
+                                      }
+                                      }, false);
+            </script>
+        <div id="log"></div>
+	</body>
+</html>
